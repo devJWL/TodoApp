@@ -1,2 +1,2 @@
-# TodoProject
-TodoProject
+# TodoApp
+TodoApp
