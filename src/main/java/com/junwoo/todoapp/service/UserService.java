@@ -40,7 +40,6 @@ public class UserService {
             () -> new NullPointerException("해당 회원이 없습니다.")
     );
 
-    user.getTodoList().clear();
     userRepository.delete(user);
 
     return ResponseEntity.ok(userDetails.getUsername() + "회원 삭제 성공");
