@@ -1,14 +1,13 @@
 package com.junwoo.todoapp.dto;
 
-import com.junwoo.todoapp.entity.User;
 import lombok.Getter;
 
 @Getter
 public class SignupResponseDto {
   private final String username;
-  private final String errorMessage;
-  public SignupResponseDto(String username, String errorMessage) {
+  private final String message;
+  public SignupResponseDto(String username, String message) {
       this.username = username;
-      this.errorMessage = errorMessage;
+      this.message = message;
   }
 }
