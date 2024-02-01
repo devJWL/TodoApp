@@ -23,8 +23,10 @@ public class Todo extends Timestamped{
   private String todoTitle;
   @Column(nullable = false)
   private String todoContents;
-  private boolean isHidden;
-  private boolean isCompleted;
+  private boolean hidden;
+  private boolean completed;
+
+
 
   @ManyToOne
   @JoinColumn(name = "user_id")
@@ -35,7 +37,14 @@ public class Todo extends Timestamped{
 
     this.todoTitle = todoRequestDto.getTodoTitle();
     this.todoContents = todoRequestDto.getTodoContents();
-    this.isHidden = todoRequestDto.isHidden();
-    this.isCompleted = todoRequestDto.isCompleted();
+    this.hidden = todoRequestDto.isHidden();
+    this.completed = todoRequestDto.isCompleted();
+  }
+
+  public void update(TodoRequestDto todoRequestDto) {
+    this.todoTitle = todoRequestDto.getTodoTitle();
+    this.todoContents = todoRequestDto.getTodoContents();
+    this.hidden = todoRequestDto.isHidden();
+    this.completed = todoRequestDto.isCompleted();
   }
 }

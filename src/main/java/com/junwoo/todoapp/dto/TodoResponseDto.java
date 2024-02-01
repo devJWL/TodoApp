@@ -9,6 +9,8 @@ import lombok.Setter;
 public class TodoResponseDto {
   private String todoTitle;
   private String todoContents;
+  private boolean hidden;
+  private boolean completed;
   private String message;
 
   public TodoResponseDto(TodoRequestDto todoRequestDto, String message) {
@@ -20,6 +22,8 @@ public class TodoResponseDto {
   public TodoResponseDto(Todo todo, String message) {
     this.todoTitle = todo.getTodoTitle();
     this.todoContents = todo.getTodoContents();
+    this.hidden = todo.isHidden();
+    this.completed = todo.isCompleted();
     this.message = message;
   }
 }

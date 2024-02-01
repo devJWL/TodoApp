@@ -11,6 +11,6 @@ public class TodoRequestDto {
   private String todoTitle;
   @NotBlank(message = "할일 내용은 필수값 입니다.")
   private String todoContents;
-  private boolean isHidden = false;
-  private boolean isCompleted = false;
+  private boolean hidden = false;
+  private boolean completed = false;
 }

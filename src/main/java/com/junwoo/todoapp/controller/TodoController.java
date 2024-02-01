@@ -45,5 +45,20 @@ public class TodoController {
     return todoService.createTodo(todoRequestDto, userDetails.getUsername());
   }
 
-
+  @PutMapping("/todoId/{todoId}")
+  public ResponseEntity<TodoResponseDto> updateTodo(
+      @PathVariable Long todoId,
+      @Valid @RequestBody TodoRequestDto todoRequestDto,
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      BindingResult bindingResult
+  ) {
+    if (bindingResult.hasErrors()) {
+      List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+      for (FieldError fieldError : fieldErrors) {
+        log.error(fieldError.getDefaultMessage());
+      }
+      return ResponseEntity.badRequest().body(new TodoResponseDto(todoRequestDto, "할일 수정이 실패했습니다."));
+    }
+    return todoService.updateTodo(todoRequestDto, todoId, userDetails.getUsername());
+  }
 }
