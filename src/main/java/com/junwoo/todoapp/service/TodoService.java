@@ -23,9 +23,11 @@ public class TodoService {
     User user = userRepository.findByUsername(username).orElseThrow(
         () -> new NullPointerException("해당 회원이 없습니다.")
     );
-
-    Todo todo = todoRepository.save(new Todo(todoRequestDto, user));
-    return ResponseEntity.ok(new TodoResponseDto(todo, "할일 등록 성공"));
+    Todo todo = new Todo(todoRequestDto);
+    user.addTodo(todo);
+    return ResponseEntity.ok(
+        new TodoResponseDto(todoRepository.save(todo),
+            "할일 등록 성공"));
   }
 
   @Transactional

@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -28,13 +29,12 @@ public class Todo extends Timestamped{
 
 
 
+  @Setter
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
 
-  public Todo(TodoRequestDto todoRequestDto, User user) {
-    this.user = user;
-
+  public Todo(TodoRequestDto todoRequestDto) {
     this.todoTitle = todoRequestDto.getTodoTitle();
     this.todoContents = todoRequestDto.getTodoContents();
     this.hidden = todoRequestDto.isHidden();
@@ -47,4 +47,5 @@ public class Todo extends Timestamped{
     this.hidden = todoRequestDto.isHidden();
     this.completed = todoRequestDto.isCompleted();
   }
+
 }
