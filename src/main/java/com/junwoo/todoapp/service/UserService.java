@@ -5,6 +5,7 @@ import com.junwoo.todoapp.dto.SignupRequestDto;
 import com.junwoo.todoapp.dto.SignupResponseDto;
 import com.junwoo.todoapp.entity.User;
 import com.junwoo.todoapp.repository.UserRepository;
+import com.junwoo.todoapp.security.UserDetailsImpl;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,5 +31,18 @@ public class UserService {
     }
     return ResponseEntity.badRequest()
         .body(new SignupResponseDto(username, "username이 중복되어 가입이 거부"));
+  }
+
+  @Transactional
+  public ResponseEntity<String> delete(UserDetailsImpl userDetails) {
+    User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow
+        (
+            () -> new NullPointerException("해당 회원이 없습니다.")
+    );
+
+    user.getTodoList().clear();
+    userRepository.delete(user);
+
+    return ResponseEntity.ok(userDetails.getUsername() + "회원 삭제 성공");
   }
 }
