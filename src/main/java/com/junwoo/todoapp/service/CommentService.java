@@ -53,5 +53,21 @@ public class CommentService {
     return ResponseEntity.ok(new CommentResponseDto(comment, "댓글 수정 성공"));
   }
 
+  public ResponseEntity<String> deleteComment(Long commentId, String username) {
+    User user = userRepository.findByUsername(username).orElseThrow(
+        ()-> new NullPointerException("해당 회원이 없습니다.")
+    );
+
+    Comment comment = commentRepository.findById(commentId).orElseThrow(
+        () -> new NullPointerException("해당 댓글을 찾을 수 없습니다.")
+    );
+
+    if (user.getUserId() != comment.getUser().getUserId()) {
+      throw new IllegalArgumentException("해등 댓글에 삭제권한이 없습니다.");
+    }
+    commentRepository.delete(comment);
+    return ResponseEntity.ok(commentId + "번 댓글 삭제");
+  }
+
 
 }
