@@ -37,5 +37,21 @@ public class CommentService {
     return ResponseEntity.ok(new CommentResponseDto(commentRepository.save(comment), "댓글 달기 성공"));
   }
 
+  public ResponseEntity<CommentResponseDto> updateComment(Long commentId, CommentRequestDto commentRequestDto, String username) {
+    User user = userRepository.findByUsername(username).orElseThrow(
+        ()-> new NullPointerException("해당 회원이 없습니다.")
+    );
+
+    Comment comment = commentRepository.findById(commentId).orElseThrow(
+        () -> new NullPointerException("해당 댓글을 찾을 수 없습니다.")
+    );
+
+    if (user.getUserId() != comment.getUser().getUserId()) {
+      throw new IllegalArgumentException("해등 댓글에 수정권한이 없습니다.");
+    }
+    comment.setCommentContents(commentRequestDto.getCommentContents());
+    return ResponseEntity.ok(new CommentResponseDto(comment, "댓글 수정 성공"));
+  }
+
 
 }
