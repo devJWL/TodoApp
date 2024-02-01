@@ -33,6 +33,10 @@ public class User extends Timestamped{
   @Column(name = "todo_id")
   private List<Todo> todoList = new ArrayList<>();
 
+  @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
+  @Column(name = "comment_id")
+  private List<Comment> commentList = new ArrayList<>();
+
   public User(String username, String password) {
     this.username = username;
     this.password = password;
@@ -41,5 +45,10 @@ public class User extends Timestamped{
   public void addTodo(Todo todo) {
     todo.setUser(this);
     this.todoList.add(todo);
+  }
+
+  public void addComment(Comment comment) {
+    comment.setUser(this);
+    this.commentList.add(comment);
   }
 }
