@@ -1,6 +1,5 @@
 package com.junwoo.todoapp.entity;
 
-import com.junwoo.todoapp.dto.SignupRequestDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 @Entity
 @NoArgsConstructor
