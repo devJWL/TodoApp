@@ -9,4 +9,5 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
   List<Todo> findAllByUser_UserId(Long userId);
   List<Todo> findAllByHiddenIsFalse();
   List<Todo> findAllByUser_UserIdAndHiddenIsTrue(Long userId);
+  List<Todo> findAllByTodoTitleContainsAndHiddenIsFalse(String title);
 }

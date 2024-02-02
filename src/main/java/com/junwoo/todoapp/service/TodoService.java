@@ -77,6 +77,15 @@ public class TodoService {
         ).toList();
     return ResponseEntity.ok(todoResponseDtoList);
   }
+  public ResponseEntity<List<TodoResponseDto>> getAllTodoByTitle(String q) {
+    List<TodoResponseDto> TodoResponseDtoList = todoRepository
+        .findAllByTodoTitleContainsAndHiddenIsFalse(q)
+        .stream()
+        .map(todo -> new TodoResponseDto(todo, "제목으로 할일 검색 조회 성공"))
+        .toList();
+
+    return ResponseEntity.ok(TodoResponseDtoList);
+  }
 
   public ResponseEntity<String> deleteTodo(Long todoId, String username) {
     Todo todo = todoRepository.findById(todoId).orElseThrow(
@@ -89,4 +98,5 @@ public class TodoService {
     todoRepository.deleteById(todoId);
     return ResponseEntity.ok(todoId + "번 할일 목록을 삭제했습니다.");
   }
+
 }
