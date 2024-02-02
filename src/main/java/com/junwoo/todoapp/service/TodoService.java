@@ -26,7 +26,7 @@ public class TodoService {
     User user = userRepository.findByUsername(username).orElseThrow(
         () -> new NullPointerException("해당 회원이 없습니다.")
     );
-    Todo todo = new Todo(todoRequestDto);
+    Todo todo = new Todo(todoRequestDto, user);
     return ResponseEntity.ok(
         new TodoResponseDto(todoRepository.save(todo),
             "할일 등록 성공")
@@ -66,13 +66,16 @@ public class TodoService {
     return ResponseEntity.ok(todoResponseDtoList);
   }
 
-  public ResponseEntity<List<TodoResponseDto>> getAllTodoList() {
-    List<TodoResponseDto> todoList = todoRepository.findAll()
+  public ResponseEntity<List<TodoResponseDto>> getAllTodoList(Long userId) {
+    List<Todo> todoList = todoRepository.findAllByUser_UserIdAndHiddenIsTrue(userId);
+    todoList.addAll(todoRepository.findAllByHiddenIsFalse());
+
+    List<TodoResponseDto> todoResponseDtoList = todoList
         .stream()
         .map(
             todo -> new TodoResponseDto(todo, "모든 회원의 할일 조회 성공")
         ).toList();
-    return ResponseEntity.ok(todoList);
+    return ResponseEntity.ok(todoResponseDtoList);
   }
 
   public ResponseEntity<String> deleteTodo(Long todoId, String username) {

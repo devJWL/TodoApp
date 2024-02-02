@@ -53,8 +53,8 @@ public class TodoController {
   }
 
   @GetMapping
-  public ResponseEntity<List<TodoResponseDto>> getAllTodos() {
-    return todoService.getAllTodoList();
+  public ResponseEntity<List<TodoResponseDto>> getAllTodos(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    return todoService.getAllTodoList(userDetails.getUser().getUserId());
   }
 
 

@@ -35,7 +35,8 @@ public class Todo extends Timestamped{
   private User user;
 
 
-  public Todo(TodoRequestDto todoRequestDto) {
+  public Todo(TodoRequestDto todoRequestDto, User user) {
+    this.user = user;
     this.todoTitle = todoRequestDto.getTodoTitle();
     this.todoContents = todoRequestDto.getTodoContents();
     this.hidden = todoRequestDto.isHidden();
