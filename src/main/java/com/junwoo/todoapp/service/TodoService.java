@@ -26,7 +26,6 @@ public class TodoService {
         () -> new NullPointerException("해당 회원이 없습니다.")
     );
     Todo todo = new Todo(todoRequestDto);
-    user.addTodo(todo);
     return ResponseEntity.ok(
         new TodoResponseDto(todoRepository.save(todo),
             "할일 등록 성공")
@@ -64,5 +63,14 @@ public class TodoService {
         todo -> new TodoResponseDto(todo, "해당 회원의 할일 조회 성공")
         ).toList();
     return ResponseEntity.ok(todoResponseDtoList);
+  }
+
+  public ResponseEntity<List<TodoResponseDto>> getAllTodoList() {
+    List<TodoResponseDto> todoList = todoRepository.findAll()
+        .stream()
+        .map(
+            todo -> new TodoResponseDto(todo, "모든 회원의 할일 조회 성공")
+        ).toList();
+    return ResponseEntity.ok(todoList);
   }
 }

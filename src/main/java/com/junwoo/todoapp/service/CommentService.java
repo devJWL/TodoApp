@@ -32,8 +32,6 @@ public class CommentService {
     );
 
     Comment comment = new Comment(commentRequestDto);
-    user.addComment(comment);
-    todo.addComment(comment);
     return ResponseEntity.ok(new CommentResponseDto(commentRepository.save(comment), "댓글 달기 성공"));
   }
 

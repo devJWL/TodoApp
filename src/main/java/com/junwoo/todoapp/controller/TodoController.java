@@ -51,7 +51,10 @@ public class TodoController {
     return todoService.getTodoByUserId(userId);
   }
 
-
+  @GetMapping
+  public ResponseEntity<List<TodoResponseDto>> getAllTodos() {
+    return todoService.getAllTodoList();
+  }
 
 
   @PutMapping("/todoId/{todoId}")
