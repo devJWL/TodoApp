@@ -35,8 +35,9 @@ public class Comment extends Timestamped{
   @JoinColumn(name = "todo_id")
   private Todo todo;
 
-  public Comment(CommentRequestDto commentRequestDto) {
+  public Comment(CommentRequestDto commentRequestDto, User user, Todo todo) {
     this.commentContents = commentRequestDto.getCommentContents();
+    this.user = user;
+    this.todo = todo;
   }
-
 }

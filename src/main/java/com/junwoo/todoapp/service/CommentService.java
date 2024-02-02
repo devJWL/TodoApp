@@ -9,6 +9,7 @@ import com.junwoo.todoapp.entity.User;
 import com.junwoo.todoapp.repository.CommentRepository;
 import com.junwoo.todoapp.repository.TodoRepository;
 import com.junwoo.todoapp.repository.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class CommentService {
         () -> new NullPointerException("해당 할일을 찾을 수 없습니다.")
     );
 
-    Comment comment = new Comment(commentRequestDto);
+    Comment comment = new Comment(commentRequestDto, user, todo);
     return ResponseEntity.ok(new CommentResponseDto(commentRepository.save(comment), "댓글 달기 성공"));
   }
 
@@ -68,4 +69,15 @@ public class CommentService {
   }
 
 
+  public ResponseEntity<List<CommentResponseDto>> getCommentListByTodoId(Long todoId) {
+    Todo todo = todoRepository.findById(todoId).orElseThrow(
+        () -> new NullPointerException("해당 할일을 찾을 수 없습니다.")
+    );
+
+    List<CommentResponseDto> commentResponseDtoList = commentRepository.findAllByTodo_TodoId(todoId)
+        .stream().map(
+            comment -> new CommentResponseDto(comment, "특정 할일의 모든 댓글 조회 성공")
+        ).toList();
+    return ResponseEntity.ok(commentResponseDtoList);
+  }
 }
