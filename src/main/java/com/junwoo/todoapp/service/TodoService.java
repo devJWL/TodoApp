@@ -8,6 +8,7 @@ import com.junwoo.todoapp.entity.User;
 import com.junwoo.todoapp.repository.TodoRepository;
 import com.junwoo.todoapp.repository.UserRepository;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class TodoService {
         () -> new NullPointerException("해당 할일을 찾을 수 없습니다.")
     );
 
-    if (user.getUserId() != todo.getUser().getUserId()) {
+    if (!Objects.equals(user.getUserId(), todo.getUser().getUserId())) {
       throw new IllegalArgumentException("수정자와 작성자의 ID가 다릅니다.");
     }
 
@@ -72,5 +73,17 @@ public class TodoService {
             todo -> new TodoResponseDto(todo, "모든 회원의 할일 조회 성공")
         ).toList();
     return ResponseEntity.ok(todoList);
+  }
+
+  public ResponseEntity<String> deleteTodo(Long todoId, String username) {
+    Todo todo = todoRepository.findById(todoId).orElseThrow(
+        () -> new NullPointerException("해당 할일을 찾을 수 없습니다.")
+    );
+
+    if (!todo.getUser().getUsername().equals(username)) {
+      throw new IllegalArgumentException("해당 회원의 할일 목록이 아닙니다. 삭제불가");
+    }
+    todoRepository.deleteById(todoId);
+    return ResponseEntity.ok(todoId + "번 할일 목록을 삭제했습니다.");
   }
 }
