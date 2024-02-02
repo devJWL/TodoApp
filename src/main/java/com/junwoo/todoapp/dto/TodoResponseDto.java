@@ -1,11 +1,13 @@
 package com.junwoo.todoapp.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.junwoo.todoapp.entity.Todo;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TodoResponseDto {
   private String todoTitle;
   private String todoContents;
