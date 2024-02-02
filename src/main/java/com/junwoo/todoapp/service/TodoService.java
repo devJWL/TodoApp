@@ -7,6 +7,7 @@ import com.junwoo.todoapp.entity.Todo;
 import com.junwoo.todoapp.entity.User;
 import com.junwoo.todoapp.repository.TodoRepository;
 import com.junwoo.todoapp.repository.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class TodoService {
   private final UserRepository userRepository;
   private final TodoRepository todoRepository;
 
+  // TODO ResponseEntity 상황별 상태코드 올바르게 나오게 수정
   @Transactional
   public ResponseEntity<TodoResponseDto> createTodo(TodoRequestDto todoRequestDto, String username) {
     User user = userRepository.findByUsername(username).orElseThrow(
@@ -27,7 +29,8 @@ public class TodoService {
     user.addTodo(todo);
     return ResponseEntity.ok(
         new TodoResponseDto(todoRepository.save(todo),
-            "할일 등록 성공"));
+            "할일 등록 성공")
+    );
   }
 
   @Transactional
@@ -47,5 +50,19 @@ public class TodoService {
     todo.update(todoRequestDto);
 
     return ResponseEntity.ok(new TodoResponseDto(todo, "할일 수정 성공"));
+  }
+
+  public ResponseEntity<List<TodoResponseDto>> getTodoByUserId(Long userId) {
+    User user = userRepository.findById(userId).orElseThrow(
+        () -> new NullPointerException("해당 회원이 없습니다.")
+    );
+
+    List<TodoResponseDto> todoResponseDtoList = todoRepository
+        .findAllByUser_UserId(user.getUserId())
+        .stream()
+        .map(
+        todo -> new TodoResponseDto(todo, "해당 회원의 할일 조회 성공")
+        ).toList();
+    return ResponseEntity.ok(todoResponseDtoList);
   }
 }

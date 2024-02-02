@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -44,6 +45,14 @@ public class TodoController {
     }
     return todoService.createTodo(todoRequestDto, userDetails.getUsername());
   }
+
+  @GetMapping("/userId/{userId}")
+  public ResponseEntity<List<TodoResponseDto>> getTodoByUserId(@PathVariable Long userId) {
+    return todoService.getTodoByUserId(userId);
+  }
+
+
+
 
   @PutMapping("/todoId/{todoId}")
   public ResponseEntity<TodoResponseDto> updateTodo(
