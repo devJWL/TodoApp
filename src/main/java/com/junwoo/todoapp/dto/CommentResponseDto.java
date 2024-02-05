@@ -14,13 +14,7 @@ public class CommentResponseDto {
   private String message;
 
 
-  public CommentResponseDto(Comment comment, String message) {
+  public CommentResponseDto(Comment comment) {
     this.commentContents = comment.getCommentContents();
-    this.message = message;
-  }
-
-  public CommentResponseDto(CommentRequestDto commentRequestDto, String message) {
-    this.commentContents = commentRequestDto.getCommentContents();
-    this.message = message;
   }
 }
