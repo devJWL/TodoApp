@@ -23,7 +23,7 @@ public class TodoService {
   private final UserRepository userRepository;
   private final TodoRepository todoRepository;
 
-  // TODO ResponseEntity 상황별 상태코드 올바르게 나오게 수정
+
   @Transactional
   public ResponseEntity<ResponseDto<TodoResponseDto>> createTodo(
       TodoRequestDto todoRequestDto,
@@ -48,7 +48,7 @@ public class TodoService {
         );
   }
 
-  // 애가 좀 이상하다.  // 다른사람의 Hidden을 가져온다.
+
   public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getTodoByUserId(
       Long myId,
       Long userId
