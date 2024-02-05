@@ -41,9 +41,8 @@ public class CommentService {
         () -> new NullPointerException("해당 할일을 찾을 수 없습니다.")
     );
 
-    Comment comment = new Comment(commentRequestDto);
-    user.addComment(comment);
-    todo.addComment(comment);
+    Comment comment = new Comment(commentRequestDto, user, todo);
+
     CommentResponseDto data = new CommentResponseDto(commentRepository.save(comment));
 
     return ResponseEntity
@@ -99,7 +98,8 @@ public class CommentService {
     }
     comment.setCommentContents(commentRequestDto.getCommentContents());
     CommentResponseDto data = new CommentResponseDto(comment);
-
+    // Service는 동작을 보여주는 클래스
+    // Dto만 반환
     return ResponseEntity
         .ok()
         .body(
@@ -123,7 +123,7 @@ public class CommentService {
     );
 
     if (!Objects.equals(user.getUserId(), comment.getUser().getUserId())) {
-      throw new IllegalArgumentException("해등 댓글에 삭제권한이 없습니다.");
+      throw new IllegalArgumentException("해당 댓글에 삭제권한이 없습니다.");
     }
     commentRepository.delete(comment);
     String data = comment.getCommentContents();
