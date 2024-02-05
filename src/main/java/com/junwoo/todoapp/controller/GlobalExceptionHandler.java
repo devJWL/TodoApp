@@ -43,7 +43,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler({IllegalArgumentException.class, NullPointerException.class})
   public ResponseEntity<ResponseDto<?>> handlerRequestError(
-      IllegalArgumentException e,
+      Exception e,
       HttpServletRequest request
   ) {
     return ResponseEntity
