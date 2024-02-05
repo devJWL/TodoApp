@@ -21,11 +21,10 @@ public class TodoResponseDto {
     this.message = message;
   }
 
-  public TodoResponseDto(Todo todo, String message) {
+  public TodoResponseDto(Todo todo) {
     this.todoTitle = todo.getTodoTitle();
     this.todoContents = todo.getTodoContents();
     this.hidden = todo.isHidden();
     this.completed = todo.isCompleted();
-    this.message = message;
   }
 }

@@ -1,6 +1,7 @@
 package com.junwoo.todoapp.controller;
 
 
+import com.junwoo.todoapp.dto.ResponseDto;
 import com.junwoo.todoapp.dto.TodoRequestDto;
 import com.junwoo.todoapp.dto.TodoResponseDto;
 import com.junwoo.todoapp.security.UserDetailsImpl;
@@ -11,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,55 +32,48 @@ public class TodoController {
 
 
   @PostMapping
-  public ResponseEntity<TodoResponseDto> createTodo(
+  public ResponseEntity<ResponseDto<TodoResponseDto>> createTodo(
       @Valid @RequestBody TodoRequestDto todoRequestDto,
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      BindingResult bindingResult
+      @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    if (bindingResult.hasErrors()) {
-      List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-      for (FieldError fieldError : fieldErrors) {
-        log.error(fieldError.getDefaultMessage());
-      }
-      return ResponseEntity.badRequest().body(new TodoResponseDto(todoRequestDto, "할일 등록이 실패했습니다."));
-    }
     return todoService.createTodo(todoRequestDto, userDetails.getUsername());
   }
 
   @GetMapping("/userId/{userId}")
-  public ResponseEntity<List<TodoResponseDto>> getTodoByUserId(@PathVariable Long userId) {
-    return todoService.getTodoByUserId(userId);
+  public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getTodoByUserId(
+      @PathVariable Long userId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
+    return todoService.getTodoByUserId(userDetails.getUser().getUserId(), userId);
   }
 
   @GetMapping
-  public ResponseEntity<List<TodoResponseDto>> getAllTodos(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+  public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getAllTodos(@AuthenticationPrincipal UserDetailsImpl userDetails) {
     return todoService.getAllTodoList(userDetails.getUser().getUserId());
   }
 
   @GetMapping("/search")
-  public ResponseEntity<List<TodoResponseDto>> getAllTodoByTitle(@RequestParam String q) {
-    return todoService.getAllTodoByTitle(q);
+  public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getAllTodoByTitle(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @RequestParam String q
+  ) {
+    return todoService.getAllTodoByTitle(userDetails.getUser().getUserId(), q);
   }
 
   @PutMapping("/todoId/{todoId}")
-  public ResponseEntity<TodoResponseDto> updateTodo(
+  public ResponseEntity<ResponseDto<TodoResponseDto>> updateTodo(
       @PathVariable Long todoId,
       @Valid @RequestBody TodoRequestDto todoRequestDto,
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      BindingResult bindingResult
+      @AuthenticationPrincipal UserDetailsImpl userDetails
   ) {
-    if (bindingResult.hasErrors()) {
-      List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-      for (FieldError fieldError : fieldErrors) {
-        log.error(fieldError.getDefaultMessage());
-      }
-      return ResponseEntity.badRequest().body(new TodoResponseDto(todoRequestDto, "할일 수정이 실패했습니다."));
-    }
     return todoService.updateTodo(todoRequestDto, todoId, userDetails.getUsername());
   }
 
   @DeleteMapping("/todoId/{todoId}")
-  public ResponseEntity<String> deleteTodo(@PathVariable Long todoId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+  public ResponseEntity<ResponseDto<String>> deleteTodo(
+      @PathVariable Long todoId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
     return todoService.deleteTodo(todoId, userDetails.getUsername());
   }
 }
