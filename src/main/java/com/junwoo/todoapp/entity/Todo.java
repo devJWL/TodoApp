@@ -4,7 +4,6 @@ package com.junwoo.todoapp.entity;
 import com.junwoo.todoapp.dto.TodoRequestDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,10 +17,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+@jakarta.persistence.Entity
 @Getter
 @NoArgsConstructor
-public class Todo extends Timestamped {
+public class Todo extends Timestamped implements Item {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
