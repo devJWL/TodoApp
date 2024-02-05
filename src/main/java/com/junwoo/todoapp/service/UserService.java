@@ -51,7 +51,7 @@ public class UserService {
     );
 
     if (!passwordEncoder.matches(password, user.getPassword())) {
-      throw new IllegalArgumentException("비밀번호가 달라서 유저 삭제 불가");
+      throw new IllegalArgumentException("비밀번호가 불일치로 회원삭제 불가");
     }
 
     userRepository.delete(user);
@@ -62,7 +62,7 @@ public class UserService {
         .body(ResponseDto
             .<String>builder()
             .httpStatus(HttpStatus.OK)
-            .message("회원 삭제 성공")
+            .message("회원삭제 성공")
             .data(data)
             .build()
         );
