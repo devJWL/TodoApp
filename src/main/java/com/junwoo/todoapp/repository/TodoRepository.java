@@ -11,7 +11,7 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
   List<Todo> findAllByUser_UserIdAndHiddenIsFalse(Long userId);
 
-  List<Todo> findAllByUser_UserIdOrHiddenIsFalse(Long userId);
+  List<Todo> findAllByUser_UserIdOrHiddenIsFalseOrderByCreatedAtDesc(Long userId);
 
 
   @Query("""
