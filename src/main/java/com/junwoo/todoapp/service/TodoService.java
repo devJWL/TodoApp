@@ -84,7 +84,7 @@ public class TodoService {
 
   public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getAllTodoList(Long userId) {
     List<TodoResponseDto> data = todoRepository
-        .findAllByUser_UserIdOrHiddenIsFalse(userId)
+        .findAllByUser_UserIdOrHiddenIsFalseOrderByCreatedAtDesc(userId)
         .stream()
         .map(TodoResponseDto::new)
         .toList();
