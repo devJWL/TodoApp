@@ -11,7 +11,7 @@ TodoApp
 
 ## API 명세서
 
-![](src/main/resources/명세서/API 명세서.png)
+![](src/main/resources/명세서/API명세서.png)
 ---
 
 ## ERD
