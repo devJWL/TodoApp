@@ -31,10 +31,8 @@ public class UserController {
   @Operation(summary = "회원가입", description = "body로 이름, 비밀번호를 받아 회원가입 하기")
   @PostMapping("/signup")
   public ResponseEntity<ResponseDto<SignupResponseDto>> signup(
-      @Valid @RequestBody SignupRequestDto signupRequestDto,
-      HttpServletRequest httpServletRequest
+      @Valid @RequestBody SignupRequestDto signupRequestDto
   ) {
-    System.out.println(httpServletRequest.getRequestURI());
     return userService.signup(signupRequestDto);
   }
 
