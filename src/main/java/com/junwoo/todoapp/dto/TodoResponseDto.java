@@ -1,7 +1,9 @@
 package com.junwoo.todoapp.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.junwoo.todoapp.entity.Comment;
 import com.junwoo.todoapp.entity.Todo;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,18 +15,20 @@ public class TodoResponseDto {
   private String todoContents;
   private boolean hidden;
   private boolean completed;
-  private String message;
-
-  public TodoResponseDto(TodoRequestDto todoRequestDto, String message) {
-    this.todoTitle = todoRequestDto.getTodoTitle();
-    this.todoContents = todoRequestDto.getTodoContents();
-    this.message = message;
-  }
+  private List<CommentResponseDto> commentResponseDtoList;
 
   public TodoResponseDto(Todo todo) {
     this.todoTitle = todo.getTodoTitle();
     this.todoContents = todo.getTodoContents();
     this.hidden = todo.isHidden();
     this.completed = todo.isCompleted();
+  }
+
+  public TodoResponseDto(Todo todo, List<Comment> commentList) {
+    this.todoTitle = todo.getTodoTitle();
+    this.todoContents = todo.getTodoContents();
+    this.hidden = todo.isHidden();
+    this.completed = todo.isCompleted();
+    commentResponseDtoList = commentList.stream().map(CommentResponseDto::new).toList();
   }
 }

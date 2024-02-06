@@ -10,11 +10,13 @@ import lombok.Setter;
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommentResponseDto {
+
+  private String username;
   private String commentContents;
-  private String message;
 
 
   public CommentResponseDto(Comment comment) {
+    this.username = comment.getUser().getUsername();
     this.commentContents = comment.getCommentContents();
   }
 }

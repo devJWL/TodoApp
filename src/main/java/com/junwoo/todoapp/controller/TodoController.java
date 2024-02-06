@@ -47,6 +47,14 @@ public class TodoController {
     return todoService.getTodoByUserId(userDetails.getUser().getUserId(), userId);
   }
 
+
+  @GetMapping("/todoId/{todoId}")
+  public ResponseEntity<ResponseDto<TodoResponseDto>> getTodoByTodoId(
+      @PathVariable Long todoId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
+    return todoService.getTodoByTodoId(todoId, userDetails.getUsername());
+  }
   @GetMapping
   public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getAllTodos(@AuthenticationPrincipal UserDetailsImpl userDetails) {
     return todoService.getAllTodoList(userDetails.getUser().getUserId());

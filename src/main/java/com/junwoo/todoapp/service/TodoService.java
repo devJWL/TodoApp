@@ -6,6 +6,7 @@ import com.junwoo.todoapp.dto.TodoRequestDto;
 import com.junwoo.todoapp.dto.TodoResponseDto;
 import com.junwoo.todoapp.entity.Todo;
 import com.junwoo.todoapp.entity.User;
+import com.junwoo.todoapp.repository.CommentRepository;
 import com.junwoo.todoapp.repository.TodoRepository;
 import com.junwoo.todoapp.repository.UserRepository;
 import java.util.List;
@@ -22,6 +23,7 @@ public class TodoService {
 
   private final UserRepository userRepository;
   private final TodoRepository todoRepository;
+  private final CommentRepository commentRepository;
 
 
   @Transactional
@@ -80,6 +82,31 @@ public class TodoService {
         );
   }
 
+  public ResponseEntity<ResponseDto<TodoResponseDto>> getTodoByTodoId(
+      Long todoId,
+      String username
+  ) {
+    Todo todo = todoRepository.findByIdOrElseThrow(todoId);
+
+    if (!todo.getUser().getUsername().equals(username) && todo.isHidden()) {
+      throw new IllegalArgumentException("접근할 수 없는 할일 입니다.");
+    }
+
+    TodoResponseDto data = new TodoResponseDto(todo,
+        commentRepository.findAllByTodo_TodoId(todoId));
+
+    return ResponseEntity
+        .ok()
+        .body(
+            ResponseDto
+                .<TodoResponseDto>builder()
+                .httpStatus(HttpStatus.OK)
+                .message("특정 할일 조회 성공")
+                .data(data)
+                .build()
+
+        );
+  }
   public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getAllTodoList(Long userId) {
     List<TodoResponseDto> data = todoRepository
         .findAllByUser_UserIdOrHiddenIsFalseOrderByCreatedAtDesc(userId)
