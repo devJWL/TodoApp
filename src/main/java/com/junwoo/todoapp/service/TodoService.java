@@ -31,8 +31,8 @@ public class TodoService {
   ) {
     User user = userRepository.findByUsernameOrElseThrow(username);
 
-    Todo todo = new Todo(todoRequestDto);
-    user.addTodo(todo);
+    Todo todo = new Todo(todoRequestDto, user);
+
     TodoResponseDto data = new TodoResponseDto(todoRepository.save(todo));
 
     return ResponseEntity
