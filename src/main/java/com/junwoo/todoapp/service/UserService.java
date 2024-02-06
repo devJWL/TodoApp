@@ -4,9 +4,13 @@ package com.junwoo.todoapp.service;
 import com.junwoo.todoapp.dto.ResponseDto;
 import com.junwoo.todoapp.dto.SignupRequestDto;
 import com.junwoo.todoapp.dto.SignupResponseDto;
+import com.junwoo.todoapp.entity.Todo;
 import com.junwoo.todoapp.entity.User;
+import com.junwoo.todoapp.repository.CommentRepository;
+import com.junwoo.todoapp.repository.TodoRepository;
 import com.junwoo.todoapp.repository.UserRepository;
 import com.junwoo.todoapp.security.UserDetailsImpl;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
+  private final TodoRepository todoRepository;
+  private final CommentRepository commentRepository;
 
   @Transactional
   public ResponseEntity<ResponseDto<SignupResponseDto>> signup(SignupRequestDto signupRequestDto) {
@@ -49,6 +55,15 @@ public class UserService {
     if (!passwordEncoder.matches(password, user.getPassword())) {
       throw new IllegalArgumentException("비밀번호가 불일치로 회원삭제 불가");
     }
+
+    List<Todo> todoList = todoRepository.findAllByUser_UserId(user.getUserId());
+
+    todoList.forEach(
+        todo -> commentRepository.deleteAll(
+            commentRepository.findAllByTodo_TodoId(todo.getTodoId()))
+    );
+
+    todoRepository.deleteAll(todoList);
 
     userRepository.delete(user);
 

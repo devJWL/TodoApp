@@ -183,7 +183,11 @@ public class TodoService {
     if (!todo.getUser().getUsername().equals(username)) {
       throw new IllegalArgumentException("해당 회원의 할일 목록이 아닙니다. 삭제불가");
     }
+
+    commentRepository.deleteAll(commentRepository.findAllByTodo_TodoId(todo.getTodoId()));
+
     todoRepository.deleteById(todoId);
+
     String data = todo.getTodoTitle();
 
     return ResponseEntity
