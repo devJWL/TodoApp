@@ -8,3 +8,12 @@ TodoApp
 + Lombok
 + MySQL
 ---
+
+## API 명세서
+
+![](src/main/resources/명세서/API 명세서.png)
+---
+
+## ERD
+
+![](src/main/resources/명세서/ERD.png)
