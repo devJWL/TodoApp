@@ -28,7 +28,7 @@ public class UserService {
 
   @Transactional
   public ResponseEntity<ResponseDto<SignupResponseDto>> signup(SignupRequestDto signupRequestDto) {
-    User user = userRepository.findByUsernameOrElseThrow(signupRequestDto.getUsername());
+    User user = userRepository.findByUsername(signupRequestDto.getUsername()).orElse(null);
     String username = signupRequestDto.getUsername();
     String password = passwordEncoder.encode(signupRequestDto.getPassword());
 

@@ -6,6 +6,7 @@ import com.junwoo.todoapp.dto.TodoRequestDto;
 import com.junwoo.todoapp.dto.TodoResponseDto;
 import com.junwoo.todoapp.security.UserDetailsImpl;
 import com.junwoo.todoapp.service.TodoService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ public class TodoController {
 
 
   @PostMapping
+  @Operation(summary = "할일 등록", description = "body로 제목, 내용을 받아 할일 등록하기")
   public ResponseEntity<ResponseDto<TodoResponseDto>> createTodo(
       @Valid @RequestBody TodoRequestDto todoRequestDto,
       @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -40,6 +42,7 @@ public class TodoController {
   }
 
   @GetMapping("/userId/{userId}")
+  @Operation(summary = "특정 유저 할일 조회", description = "pathvariable로 회원ID를 받아 회원의 할일 조회하기")
   public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getTodoByUserId(
       @PathVariable Long userId,
       @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -49,6 +52,7 @@ public class TodoController {
 
 
   @GetMapping("/todoId/{todoId}")
+  @Operation(summary = "특정 할일 조회", description = "pathvariable로 할일ID를 받아 할일 조회하기")
   public ResponseEntity<ResponseDto<TodoResponseDto>> getTodoByTodoId(
       @PathVariable Long todoId,
       @AuthenticationPrincipal UserDetailsImpl userDetails
@@ -56,11 +60,13 @@ public class TodoController {
     return todoService.getTodoByTodoId(todoId, userDetails.getUsername());
   }
   @GetMapping
+  @Operation(summary = "모든 할일 조회", description = "모든 할일 조회하기")
   public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getAllTodos(@AuthenticationPrincipal UserDetailsImpl userDetails) {
     return todoService.getAllTodoList(userDetails.getUser().getUserId());
   }
 
   @GetMapping("/search")
+  @Operation(summary = "할일 제목으로 검색", description = "requestparam으로 검색어를 받아 제목으로 조회")
   public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getAllTodoByTitle(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @RequestParam String q
@@ -69,6 +75,7 @@ public class TodoController {
   }
 
   @PutMapping("/todoId/{todoId}")
+  @Operation(summary = "할일 변경", description = "body로 입력을 받아 할일 수정")
   public ResponseEntity<ResponseDto<TodoResponseDto>> updateTodo(
       @PathVariable Long todoId,
       @Valid @RequestBody TodoRequestDto todoRequestDto,
@@ -78,6 +85,7 @@ public class TodoController {
   }
 
   @DeleteMapping("/todoId/{todoId}")
+  @Operation(summary = "할일 삭제", description = "pathvariable로 할일ID를 입력받아 해당 할일 삭제")
   public ResponseEntity<ResponseDto<String>> deleteTodo(
       @PathVariable Long todoId,
       @AuthenticationPrincipal UserDetailsImpl userDetails
