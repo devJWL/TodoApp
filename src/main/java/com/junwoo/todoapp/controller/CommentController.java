@@ -53,6 +53,7 @@ public class CommentController {
           @Valid @RequestBody CommentRequestDto commentRequestDto,
           @AuthenticationPrincipal UserDetailsImpl userDetails
       ) {
+    // 랩핑과정은 Controller
     return commentService.updateComment(commentId, commentRequestDto, userDetails.getUsername());
   }
 

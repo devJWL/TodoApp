@@ -19,4 +19,5 @@ public class ResponseDto<T> {
   public String getHttpStatus() {
     return httpStatus.toString();
   }
+  // of 메서드를 활용하여 ResponseDto생성
 }

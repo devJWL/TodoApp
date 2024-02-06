@@ -4,10 +4,12 @@ package com.junwoo.todoapp.service;
 import com.junwoo.todoapp.dto.ResponseDto;
 import com.junwoo.todoapp.dto.TodoRequestDto;
 import com.junwoo.todoapp.dto.TodoResponseDto;
+import com.junwoo.todoapp.entity.Comment;
 import com.junwoo.todoapp.entity.Todo;
 import com.junwoo.todoapp.entity.User;
 import com.junwoo.todoapp.repository.TodoRepository;
 import com.junwoo.todoapp.repository.UserRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -75,6 +77,24 @@ public class TodoService {
                 .<List<TodoResponseDto>>builder()
                 .httpStatus(HttpStatus.OK)
                 .message("특정 ID회원 할일 목록 조회 성공")
+                .data(data)
+                .build()
+        );
+  }
+  public ResponseEntity<ResponseDto<TodoResponseDto>> getTodoByTodoId(Long todoId, String username) {
+    Todo todo = todoRepository.findByIdOrElseThrow(todoId);
+    if (todo.isHidden() && !todo.getUser().getUsername().equals(username)) {
+      throw new IllegalArgumentException("볼 수 없는 할일 입니다.");
+    }
+
+    TodoResponseDto data = new TodoResponseDto(todo);
+    return ResponseEntity
+        .ok()
+        .body(
+            ResponseDto
+                .<TodoResponseDto>builder()
+                .httpStatus(HttpStatus.OK)
+                .message("특정 할일 조회 성공")
                 .data(data)
                 .build()
         );
@@ -170,4 +190,6 @@ public class TodoService {
                 .build()
         );
   }
+
+
 }

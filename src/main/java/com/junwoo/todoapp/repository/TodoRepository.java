@@ -1,6 +1,7 @@
 package com.junwoo.todoapp.repository;
 
 import com.junwoo.todoapp.entity.Todo;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +12,12 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
   List<Todo> findAllByUser_UserIdAndHiddenIsFalse(Long userId);
 
+
+  default Todo findByIdOrElseThrow(Long todoId) {
+    return findById(todoId).orElseThrow(
+        () -> new EntityNotFoundException("해당 할일은 없습니다.")
+    );
+  }
   List<Todo> findAllByUser_UserIdOrHiddenIsFalseOrderByCreatedAtDesc(Long userId);
 
 

@@ -11,7 +11,6 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommentResponseDto {
   private String commentContents;
-  private String message;
 
 
   public CommentResponseDto(Comment comment) {

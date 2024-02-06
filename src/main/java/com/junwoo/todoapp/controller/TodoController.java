@@ -6,6 +6,7 @@ import com.junwoo.todoapp.dto.TodoRequestDto;
 import com.junwoo.todoapp.dto.TodoResponseDto;
 import com.junwoo.todoapp.security.UserDetailsImpl;
 import com.junwoo.todoapp.service.TodoService;
+import com.junwoo.todoapp.service.UserService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,6 @@ public class TodoController {
   ) {
     return todoService.createTodo(todoRequestDto, userDetails.getUsername());
   }
-
   @GetMapping("/userId/{userId}")
   public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getTodoByUserId(
       @PathVariable Long userId,
@@ -47,6 +47,10 @@ public class TodoController {
     return todoService.getTodoByUserId(userDetails.getUser().getUserId(), userId);
   }
 
+  @GetMapping("/todoId/{todoId}")
+  public ResponseEntity<ResponseDto<TodoResponseDto>> getTodoByTodoId(@PathVariable Long todoId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    return todoService.getTodoByTodoId(todoId, userDetails.getUsername());
+  }
   @GetMapping
   public ResponseEntity<ResponseDto<List<TodoResponseDto>>> getAllTodos(@AuthenticationPrincipal UserDetailsImpl userDetails) {
     return todoService.getAllTodoList(userDetails.getUser().getUserId());
