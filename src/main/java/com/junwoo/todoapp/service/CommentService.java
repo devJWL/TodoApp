@@ -33,9 +33,7 @@ public class CommentService {
       CommentRequestDto commentRequestDto,
       String username
   ) {
-    User user = userRepository.findByUsername(username).orElseThrow(
-        ()-> new NullPointerException("해당 회원이 없습니다.")
-    );
+    User user = userRepository.findByUsernameOrElseThrow(username);
 
     Todo todo = todoRepository.findById(todoId).orElseThrow(
         () -> new NullPointerException("해당 할일을 찾을 수 없습니다.")
@@ -85,10 +83,7 @@ public class CommentService {
       CommentRequestDto commentRequestDto,
       String username
   ) {
-    User user = userRepository.findByUsername(username).orElseThrow(
-        ()-> new NullPointerException("해당 회원이 없습니다.")
-    );
-
+    User user = userRepository.findByUsernameOrElseThrow(username);
     Comment comment = commentRepository.findById(commentId).orElseThrow(
         () -> new NullPointerException("해당 댓글을 찾을 수 없습니다.")
     );
@@ -114,9 +109,7 @@ public class CommentService {
 
   @Transactional
   public ResponseEntity<ResponseDto<String>> deleteComment(Long commentId, String username) {
-    User user = userRepository.findByUsername(username).orElseThrow(
-        ()-> new NullPointerException("해당 회원이 없습니다.")
-    );
+    User user = userRepository.findByUsernameOrElseThrow(username);
 
     Comment comment = commentRepository.findById(commentId).orElseThrow(
         () -> new NullPointerException("해당 댓글을 찾을 수 없습니다.")

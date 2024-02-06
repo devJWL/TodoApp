@@ -7,7 +7,6 @@ import com.junwoo.todoapp.dto.SignupResponseDto;
 import com.junwoo.todoapp.entity.User;
 import com.junwoo.todoapp.repository.UserRepository;
 import com.junwoo.todoapp.security.UserDetailsImpl;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +22,11 @@ public class UserService {
 
   @Transactional
   public ResponseEntity<ResponseDto<SignupResponseDto>> signup(SignupRequestDto signupRequestDto) {
-    Optional<User> user = userRepository.findByUsername(signupRequestDto.getUsername());
+    User user = userRepository.findByUsernameOrElseThrow(signupRequestDto.getUsername());
     String username = signupRequestDto.getUsername();
     String password = passwordEncoder.encode(signupRequestDto.getPassword());
 
-    if (user.isPresent()) {
+    if (user != null) {
       throw new IllegalArgumentException("username이 중복되어 가입이 거부");
     }
     SignupResponseDto data = new SignupResponseDto(
@@ -45,10 +44,7 @@ public class UserService {
 
   @Transactional
   public ResponseEntity<ResponseDto<String>> delete(String password, UserDetailsImpl userDetails) {
-    User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow
-        (
-            () -> new NullPointerException("해당 회원이 없습니다.")
-    );
+    User user = userRepository.findByUsernameOrElseThrow(userDetails.getUsername());
 
     if (!passwordEncoder.matches(password, user.getPassword())) {
       throw new IllegalArgumentException("비밀번호가 불일치로 회원삭제 불가");

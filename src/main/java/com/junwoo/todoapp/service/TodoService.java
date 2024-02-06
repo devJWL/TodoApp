@@ -29,9 +29,7 @@ public class TodoService {
       TodoRequestDto todoRequestDto,
       String username
   ) {
-    User user = userRepository.findByUsername(username).orElseThrow(
-        () -> new NullPointerException("해당 회원이 없습니다.")
-    );
+    User user = userRepository.findByUsernameOrElseThrow(username);
 
     Todo todo = new Todo(todoRequestDto);
     user.addTodo(todo);
@@ -124,10 +122,7 @@ public class TodoService {
       Long todoId,
       String username
   ) {
-    User user = userRepository.findByUsername(username).orElseThrow(
-        () -> new NullPointerException("해당 회원이 없습니다.")
-    );
-
+    User user = userRepository.findByUsernameOrElseThrow(username);
     Todo todo = todoRepository.findById(todoId).orElseThrow(
         () -> new NullPointerException("해당 할일을 찾을 수 없습니다.")
     );
